@@ -45,6 +45,7 @@
                         <button class="btn btn-primary" id="btn-show-register">
                             <i class="fas fa-user-plus"></i> Nuevo Registro de Paciente
                         </button>
+     
                         <input type="text" class="search-input" placeholder="Buscar paciente por Cédula o Nombre..." id="search-input">
                     </div>
 
@@ -77,14 +78,12 @@
         </div>
     </div>
     
-    <div id="patient-registration-modal" class="modal-overlay" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>📋 Nuevo Registro de Paciente</h2>
-                <span class="close-button" id="btn-hide-register">&times;</span>
-            </div>
-            
-            <form id="new-patient-form" class="registration-form modal-body">
+                <div id="patient-registration-modal" class="modal-overlay" style="display: none;">
+                    <button id="btn-hide-register">Cancelar</button> 
+                    
+                    <form id="new-patient-form">
+                        </form>
+                </div>
                 
                 <h3>Datos Personales</h3>
                 <div class="antecedents-grid">
