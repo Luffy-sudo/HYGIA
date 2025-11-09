@@ -59,17 +59,17 @@ function handleLogin(event) {
 // Función global para cerrar sesión
 function logout() {
     sessionStorage.clear();
-    window.location.href = 'login.html';
+    window.location.href = 'index.html';
 }
 
 // Función para verificar la autenticación en páginas protegidas
 function checkAuth() {
     if (sessionStorage.getItem('isAuthenticated') !== 'true') {
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     }
 }
 
 // Ejecutar la verificación si no estamos en login.html
-if (!window.location.pathname.includes('login.html')) {
+if (!window.location.pathname.includes('index.html')) {
     checkAuth();
 }
