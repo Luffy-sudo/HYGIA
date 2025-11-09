@@ -46,7 +46,7 @@ function handleLogin(event) {
 
         // 2. Redirigir a la página de inicio correspondiente
         setTimeout(() => {
-            window.location.href = user.startPage;
+            window.location.href = 'index.html';
         }, 1000);
 
     } else {
