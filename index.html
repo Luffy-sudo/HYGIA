@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HYGIA | Dashboard</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"> 
+    
+</head>
+<body>
+    <div class="app-container">
+        
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-hospital-alt logo-icon"></i>
+                <h2>HYGIA</h2>
+            </div>
+            
+            <div class="sidebar-footer">
+                <a href="#" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+            </div>
+        </aside>
+
+        <main class="main-content-wrapper">
+            <header class="main-header">
+                <div class="header-left">
+                    <h1 id="page-title">Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <span class="user-welcome">Cargando...</span>
+                    <i class="fas fa-bell notification-icon"></i>
+                    <div class="user-avatar">?</div>
+                </div>
+            </header>
+
+            <div id="content-area" class="content-area">
+                
+                <section id="dashboard" class="page-content active-page">
+                    <div class="dashboard-grid">
+                        <div class="card stat-card">
+                            <i class="fas fa-procedures icon-large blue"></i>
+                            <h3>Pacientes Activos</h3>
+                            <p class="stat-number">150</p>
+                        </div>
+                        <div class="card stat-card">
+                            <i class="fas fa-calendar-day icon-large green"></i>
+                            <h3>Citas Hoy</h3>
+                            <p class="stat-number">25</p>
+                        </div>
+                        <div class="card stat-card">
+                            <i class="fas fa-user-plus icon-large orange"></i>
+                            <h3>Nuevos Pacientes (Mes)</h3>
+                            <p class="stat-number">30</p>
+                        </div>
+                        <div class="card stat-card">
+                            <i class="fas fa-bed icon-large red"></i>
+                            <h3>Camas Ocupadas</h3>
+                            <p class="stat-number">75%</p>
+                        </div>
+                    </div>
+                    <div class="charts-grid">
+                        <div class="card large-card">
+                            <h3>Actividad Reciente</h3>
+                            <p>Aquí irá la gráfica de actividad.</p>
+                        </div>
+                        <div class="card large-card">
+                            <h3>Próximas Citas</h3>
+                            <ul>
+                                <li><strong>09:00 AM:</strong> María López - Dr. García</li>
+                                <li><strong>10:30 AM:</strong> Juan Pérez - Dra. Soto</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="hce" class="page-content">
+                    <div class="hce-header">
+                        <h2>Historia Clínica Electrónica 📝</h2>
+                        <div class="patient-info-card card">
+                            <h3>Paciente Activo: <span id="hce-patient-name">No Seleccionado</span></h3>
+                            <p>ID: <span id="hce-patient-id">----</span> | Edad: <span id="hce-patient-age">--</span> | Última Visita: <span id="hce-last-visit">----</span></p>
+                        </div>
+                    </div>
+                    <div class="hce-tabs">
+                        <button class="hce-tab-btn active" data-target="hce-notes">Notas Médicas</button>
+                        <button class="hce-tab-btn" data-target="hce-orders">Órdenes y Prescripción</button>
+                        <button class="hce-tab-btn" data-target="hce-diagnostics">Diagnósticos y Evolución</button>
+                        <button class="hce-tab-btn" data-target="hce-antecedents">Antecedentes Clínicos</button>
+                    </div>
+
+                    <div class="hce-content-area card">
+                        <div id="hce-notes" class="hce-tab-pane active-pane">
+                            <div class="controls-bar">
+                                <button class="btn btn-primary"><i class="fas fa-file-medical"></i> Nueva Nota</button>
+                                <input type="text" placeholder="Buscar notas..." class="search-input" style="max-width: 250px;">
+                            </div>
+                            <div class="timeline-container">
+                                <div class="timeline-item">
+                                    <div class="timeline-dot"></div>
+                                    <div class="timeline-content">
+                                        <h4>Nota de Evolución (2025-10-25)</h4>
+                                        <p>Paciente presenta mejoría en síntomas respiratorios...</p>
+                                        <span class="timeline-meta">Dr. López | Medicina Interna</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="hce-orders" class="hce-tab-pane"><p>Aquí se gestionarán las órdenes.</p></div>
+                        <div id="hce-diagnostics" class="hce-tab-pane"><p>Aquí se listarán los diagnósticos.</p></div>
+                        <div id="hce-antecedents" class="hce-tab-pane"><p>Historial clínico.</p></div>
+                    </div>
+                </section>
+                
+                <section id="patients" class="page-content"><h2>Gestión de Pacientes</h2><p>Aquí irá la tabla de pacientes.</p></section>
+                <section id="appointments" class="page-content"><h2>Citas Médicas</h2><p>Gestión de Citas.</p></section>
+                <section id="doctors" class="page-content"><h2>Personal Médico</h2><p>Gestión de personal.</p></section>
+                <section id="inventory" class="page-content"><h2>Inventario</h2><p>Gestión de inventario.</p></section>
+                <section id="billing" class="page-content"><h2>Facturación</h2><p>Gestión de facturación.</p></section>
+                <section id="settings" class="page-content"><h2>Ajustes</h2><p>Ajustes del sistema.</p></section>
+                <section id="hce" class="page-content"><h2>Historia Clínica Electrónica</h2><p>Sección HCE.</p></section>
+                <section id="logistica" class="page-content"><h2>Logística y Camas</h2><p>Gestión de logística.</p></section>
+                <section id="admision" class="page-content"><h2>Admisión y Citas</h2><p>Gestión de admisión.</p></section>
+                <section id="seguridad" class="page-content"><h2>Gestión de Personal</h2><p>Gestión de seguridad.</p></section>
+                <section id="mstr" class="page-content"><h2>Catálogos (Maestros)</h2><p>Gestión de catálogos.</p></section>
+                <section id="terapias" class="page-content"><h2>Terapias</h2><p>Gestión de terapias.</p></section>
+                <section id="audit" class="page-content"><h2>Auditoría Gerencial</h2><p>Reportes de auditoría.</p></section>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

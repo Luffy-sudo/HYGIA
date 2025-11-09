@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HYGIA - Módulo de Farmacia</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+
+        <div class="main-content-wrapper">
+            
+            <header class="main-header">
+                <div class="header-left">
+                    <h1>Gestión de Farmacia e Inventario</h1>
+                </div>
+                <div class="header-right">
+                    <span class="user-welcome" id="user-welcome">Bienvenido/a, Farmacéutico</span>
+                    <i class="fas fa-bell notification-icon"></i>
+                    <div class="user-avatar" id="user-avatar">FA</div>
+                </div>
+            </header>
+
+            <main class="content-area">
+                <div class="page-content active-page" id="farmacia-module">
+                    
+                    <div class="controls-bar">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Nuevo Medicamento
+                        </button>
+                        <input type="text" class="search-input" placeholder="Buscar medicamento o receta...">
+                    </div>
+
+                    <div class="hce-tabs">
+                        <button class="hce-tab-btn active" data-tab="inventory">Inventario</button>
+                        <button class="hce-tab-btn" data-tab="dispensations">Dispensación de Recetas</button>
+                        <button class="hce-tab-btn" data-tab="suppliers">Proveedores</button>
+                    </div>
+
+                    <div class="hce-content-area">
+                        <div id="inventory" class="hce-tab-pane active-pane">
+                            <h2>Inventario de Medicamentos</h2>
+                            <p>Tabla con stock, fecha de vencimiento y ubicación de medicamentos.</p>
+                            </div>
+
+                        <div id="dispensations" class="hce-tab-pane">
+                            <h2>Recetas Pendientes</h2>
+                            <p>Lista de recetas generadas por los médicos, listas para ser despachadas.</p>
+                            </div>
+
+                         <div id="suppliers" class="hce-tab-pane">
+                            <h2>Gestión de Proveedores</h2>
+                            <p>Información de contactos y pedidos a proveedores.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="script.js"></script> 
+    <script src="auth.js"></script> 
+    <script>
+        // Muestra/oculta paneles de Farmacia (se puede mover a script.js)
+        document.querySelectorAll('.hce-tab-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.hce-tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.hce-tab-pane').forEach(pane => pane.classList.remove('active-pane'));
+                
+                this.classList.add('active');
+                
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active-pane');
+            });
+        });
+    </script>
+</body>
+</html>
