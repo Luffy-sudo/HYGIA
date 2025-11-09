@@ -1,75 +1,87 @@
 /**
  * HYGIA - auth.js
- * Lógica de Autenticación simulada y gestión de roles
+ * Lógica de Autenticación y Control de Acceso por Roles
  */
 
-// Datos de prueba: Usuario, Contraseña, Rol, Página de inicio
-const USERS = {
-    // Médico: Acceso a HCE
-    '12345': { password: 'pass', role: 'medico', name: 'Dr. Pérez', startPage: 'hce.html' },
-    // Recepcionista: Acceso a Admisión
-    '67890': { password: 'pass', role: 'recepcionista', name: 'Sra. Gómez', startPage: 'admision.html' },
-    // Farmacéutico: Acceso a Farmacia
-    '11223': { password: 'pass', role: 'farmaceutico', name: 'Sr. Ruiz', startPage: 'farmacia.html' }
-};
-
-document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('login-form');
-    if (loginForm) {
-        loginForm.addEventListener('submit', handleLogin);
-    }
-});
-
-function handleLogin(event) {
-    event.preventDefault();
+// ==========================================================
+// 1. BASE DE DATOS DE USUARIOS DE PRUEBA (SIMULADA)
+// ==========================================================
+const USERS_DB = [
+    // Rol: MEDICO. Redirige a hce.html
+    { code: '12345', password: 'pass', name: 'Dr. Pérez', role: 'medico', avatar: 'DP' },
     
+    // Rol: RECEPCIONISTA. Redirige a admision.html (Módulo habilitado)
+    { code: '67890', password: 'pass', name: 'Sra. García', role: 'recepcionista', avatar: 'SG' },
+    
+    // Rol: FARMACEUTICO. Redirige a farmacia.html
+    { code: '24680', password: 'pass', name: 'Farm. López', role: 'farmaceutico', avatar: 'FL' },
+];
+
+// ==========================================================
+// 2. FUNCIÓN DE INICIO DE SESIÓN
+// ==========================================================
+function login() {
     const username = document.getElementById('username').value.trim();
     const password = document.getElementById('password').value.trim();
-    const messageElement = document.getElementById('login-message');
 
-    // Limpiar mensaje anterior
-    messageElement.classList.remove('active', 'error', 'success');
-    messageElement.innerHTML = '';
+    const user = USERS_DB.find(u => u.code === username && u.password === password);
 
-    const user = USERS[username];
-
-    if (user && user.password === password) {
-        // Autenticación exitosa
-        messageElement.classList.add('active', 'success');
-        messageElement.innerHTML = `¡Bienvenido/a, ${user.name}! Redirigiendo...`;
-
-        // 1. Guardar la información del usuario en el almacenamiento de sesión
-        sessionStorage.setItem('isAuthenticated', 'true');
+    if (user) {
+        // Almacenar información esencial del usuario en la sesión
         sessionStorage.setItem('userRole', user.role);
         sessionStorage.setItem('userName', user.name);
-        sessionStorage.setItem('userAvatar', user.name.split(' ').map(n => n[0]).join('').toUpperCase()); // Iniciales
-
-        // 2. Redirigir a la página de inicio correspondiente
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 1000);
+        sessionStorage.setItem('userAvatar', user.avatar);
+        
+        // Redirección por Rol al módulo correspondiente
+        if (user.role === 'recepcionista') {
+            window.location.href = 'admision.html';
+        } else if (user.role === 'medico') {
+            window.location.href = 'hce.html';
+        } else if (user.role === 'farmaceutico') {
+            window.location.href = 'farmacia.html';
+        } else {
+            // Manejo de rol no reconocido
+            alert('Rol de usuario no reconocido. Contacte a soporte.');
+            window.location.href = 'index.html'; 
+        }
 
     } else {
-        // Autenticación fallida
-        messageElement.classList.add('active', 'error');
-        messageElement.innerHTML = 'Error de autenticación. Usuario o contraseña incorrectos.';
+        alert('Credenciales incorrectas. Intente de nuevo.');
     }
 }
 
-// Función global para cerrar sesión
+// ==========================================================
+// 3. FUNCIÓN DE CIERRE DE SESIÓN
+// ==========================================================
 function logout() {
+    // Limpia todas las variables de sesión
     sessionStorage.clear();
-    window.location.href = 'index.html';
+    // Redirige a la página de inicio de sesión (index.html)
+    window.location.href = 'index.html'; 
 }
 
-// Función para verificar la autenticación en páginas protegidas
+// ==========================================================
+// 4. VERIFICACIÓN DE AUTENTICACIÓN (Guardia de Ruta)
+// ==========================================================
 function checkAuth() {
-    if (sessionStorage.getItem('isAuthenticated') !== 'true') {
-        window.location.href = 'index.html';
+    const userRole = sessionStorage.getItem('userRole');
+    
+    // Obtiene la ruta actual (ej: admision.html)
+    const currentPath = window.location.pathname;
+
+    // Si NO hay rol de usuario en la sesión Y NO estamos en la página de login...
+    if (!userRole && !currentPath.includes('index.html')) {
+        // Redirige forzosamente al login
+        alert('Sesión expirada o no autenticada. Por favor, inicie sesión.');
+        window.location.href = 'index.html'; 
     }
 }
 
-// Ejecutar la verificación si no estamos en login.html
+// ==========================================================
+// 5. EJECUCIÓN
+// ==========================================================
+// Esta línea asegura que la función checkAuth se ejecute al cargar cualquier página.
+// Solo se excluye la página de inicio (index.html).
 if (!window.location.pathname.includes('index.html')) {
     checkAuth();
 }
