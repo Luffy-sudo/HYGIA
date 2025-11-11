@@ -43,14 +43,16 @@ const NAVIGATION_MAP = {
 // ==========================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Obtener la información del usuario de la sesión
-    const userRole = sessionStorage.getItem('userRole');
-    const userName = sessionStorage.getItem('userName');
-    const userAvatar = sessionStorage.getItem('userAvatar');
-    
+    // Obtener la información del usuario de la sesión (simulación de login)
+    const userRole = 'recepcionista'; // Forzamos el rol para la demostración de Admision
+    const userName = 'Juanita Pérez'; // Nombre simulado
+    sessionStorage.setItem('userRole', userRole);
+    sessionStorage.setItem('userName', userName);
+
     // Inicializar el dashboard (Sidebar y Header) si el usuario está logueado
     if (userRole && userName) {
-        initializeDashboard(userRole, userName, userAvatar);
+        // En un entorno real, initializeDashboard construiría el menú lateral.
+        // Aquí solo nos enfocaremos en la lógica del módulo activo.
     }
 
     // Inicializar la lógica específica del módulo activo
@@ -132,44 +134,33 @@ function initializeAdmissionModule() {
         return; 
     }
 
-    // 2. Manejo de Pestañas (Tabs)
-    document.querySelectorAll('.hce-tab-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            // Ocultar el formulario de registro si estaba visible
-            registrationModal.style.display = 'none'; // Asegurar que el modal esté oculto
-
-            // Activar la pestaña correcta (list-patients)
-            document.querySelectorAll('.hce-tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.hce-tab-pane').forEach(pane => {
-                pane.classList.remove('active-pane');
-                pane.style.display = 'block'; 
-            });
-            
-            this.classList.add('active');
-            
-            const tabId = this.getAttribute('data-tab');
-            document.getElementById(tabId).classList.add('active-pane');
-        });
-    });
-
-    // 3. Manejo de Modal de Registro (Botones Mostrar/Ocultar y Submit)
-    
-    // Mostrar el modal (usado por btn-show-register)
-    btnShowRegister.addEventListener('click', () => {
+   // Funciones de control del modal
+    function openModal() {
         registrationModal.style.display = 'flex'; // Usamos flex para centrar el modal
-    });
+        document.body.style.overflow = 'hidden'; // Bloquea el scroll
+    }
 
-    // Ocultar el modal (usado por btn-hide-register, close-button)
-    btnHideRegister.addEventListener('click', () => {
+    function closeModal() {
         registrationModal.style.display = 'none';
+        document.body.style.overflow = 'auto'; // Restaura el scroll
+        newPatientForm.reset();
         renderPatientTable(PATIENTS_DB); // Refrescar la tabla al cerrar
-    });
+    }
+
+    // 2. Manejo de Modal de Registro (Botones Mostrar/Ocultar y Submit)
+    
+    // Mostrar el modal
+    btnShowRegister.addEventListener('click', openModal);
+
+    // Ocultar el modal (usado por el botón 'X' o 'Cancelar')
+    if (closeButton) {
+        closeButton.addEventListener('click', closeModal);
+    }
 
     // Cerrar modal al hacer clic fuera de su contenido
     registrationModal.addEventListener('click', function(e) {
         if (e.target === this) {
-            registrationModal.style.display = 'none';
-            renderPatientTable(PATIENTS_DB);
+            closeModal();
         }
     });
 
@@ -199,34 +190,36 @@ function initializeAdmissionModule() {
         // Añadir a la base de datos simulada
         PATIENTS_DB.push(newPatient);
         
-        alert(`Paciente ${name} (ID: ${newId}) registrado exitosamente. (Simulación)`);
+        // Sustitución de alert() por notificación visual
+        showSuccessMessage(`Paciente ${name} (ID: ${newId}) registrado exitosamente.`);
         
         // Limpiar formulario y cerrar modal
-        newPatientForm.reset();
-        registrationModal.style.display = 'none'; 
-        renderPatientTable(PATIENTS_DB); // Refrescar tabla
+        closeModal(); 
     });
 
-    // 4. Manejo de Búsqueda de Pacientes (Por Cédula o Nombre)
-    searchInput.addEventListener('input', function() {
-        const query = this.value.toLowerCase().trim();
-        
-        // Si la búsqueda está vacía, mostrar la lista completa
-        if (query === '') {
-            renderPatientTable(PATIENTS_DB);
-            return;
-        }
+    // 3. Manejo de Búsqueda de Pacientes (Por Cédula o Nombre)
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            
+            // Si la búsqueda está vacía, mostrar la lista completa
+            if (query === '') {
+                renderPatientTable(PATIENTS_DB);
+                return;
+            }
 
-        const results = PATIENTS_DB.filter(patient => 
-            patient.cedula.includes(query) || patient.name.toLowerCase().includes(query)
-        );
+            const results = PATIENTS_DB.filter(patient => 
+                patient.cedula.includes(query) || patient.name.toLowerCase().includes(query)
+            );
 
-        renderPatientTable(results);
-    });
+            renderPatientTable(results);
+        });
+    }
     
-    // 5. Renderizado Inicial de la Tabla
+    // 4. Renderizado Inicial de la Tabla
     renderPatientTable(PATIENTS_DB);
 }
+
 
 // ==========================================================
 // 5. LÓGICA ESPECÍFICA DEL MÓDULO HCE
