@@ -8,13 +8,13 @@
 // ==========================================================
 const USERS_DB = [
     // Rol: MEDICO. Redirige a hce.html
-    { code: '12345', password: 'pass', name: 'Dr. Pérez', role: 'medico', avatar: 'DP' },
+    { code: '12345', password: 'pass', name: 'Oscar', role: 'medico', avatar: 'DP' },
     
     // Rol: RECEPCIONISTA. Redirige a admision.html (Módulo habilitado)
-    { code: '67890', password: 'pass', name: 'Sra. García', role: 'recepcionista', avatar: 'SG' },
+    { code: '67890', password: 'pass', name: 'Graciela', role: 'recepcionista', avatar: 'SG' },
     
     // Rol: FARMACEUTICO. Redirige a farmacia.html
-    { code: '24680', password: 'pass', name: 'Farm. López', role: 'farmaceutico', avatar: 'FL' },
+    { code: '24680', password: 'pass', name: 'Jaime', role: 'farmaceutico', avatar: 'FL' },
 ];
 
 // ==========================================================

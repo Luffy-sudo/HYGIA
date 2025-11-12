@@ -156,7 +156,7 @@ function initializeAdmissionModule() {
     
     // Mostrar el modal (usado por btn-show-register)
     btnShowRegister.addEventListener('click', () => {
-        registrationModal.style.display = 'flex'; // Usamos flex para centrar el modal
+        registrationModal.style.display = 'inline-flex'; // Usamos flex para centrar el modal
     });
 
     // Ocultar el modal (usado por btn-hide-register, close-button)
