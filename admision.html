@@ -1,151 +1,330 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HYGIA - Módulo de Admisión</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGH - Admisión de Pacientes</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .btn-primary {
+            transition: all 0.15s ease-in-out;
+        }
+        .card-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+        }
+        /* Estilo para el modal personalizado (reemplazo de alert/confirm) */
+        .custom-modal-overlay {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+    </style>
 </head>
-<body>
-    <div class="app-container">
-        
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <i class="fas fa-heartbeat logo-icon"></i>
-                <h2>HYGIA</h2>
-            </div>
-            <nav class="sidebar-nav">
-                <ul id="menu-items">
-                    </ul>
-            </nav>
-            <div class="sidebar-footer">
-                <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
-            </div>
-        </aside>
+<body class="p-4 sm:p-8">
 
-        <div class="main-content-wrapper">
-            
-            <header class="main-header">
-                <div class="header-left">
-                    <h1>Admisión y Gestión de Pacientes</h1>
-                </div>
-                <div class="header-right">
-                    <span class="user-welcome" id="user-welcome">Bienvenido/a...</span>
-                    <i class="fas fa-bell notification-icon"></i>
-                    <div class="user-avatar" id="user-avatar">?</div>
-                </div>
-            </header>
+    <div class="max-w-6xl mx-auto">
+        <!-- Encabezado -->
+        <header class="text-center mb-10 p-6 bg-white rounded-xl card-shadow border-t-4 border-sky-600">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900">
+                <span class="text-sky-600">ADMISION</span> de Pacientes
+            </h1>
+            <p class="text-md text-gray-500 mt-1">
+                Gestión de la tabla <span class="font-mono bg-gray-100 p-1 rounded text-sm">ADMISION.Paciente</span>
+            </p>
+            <p class="text-xs text-red-500 font-semibold mt-2">
+                ¡ADVERTENCIA! Los datos son NO PERSISTENTES y se borrarán al recargar la página.
+            </p>
+        </header>
 
-            <main class="content-area">
-                <div class="page-content active-page" id="admision-module">
-                    
-                    <div class="controls-bar">
-                        <button class="btn btn-primary" id="btn-show-register">
-                            <i class="fas fa-user-plus"></i> Nuevo Registro de Paciente
-                        </button>
-     
-                        <input type="text" class="search-input" placeholder="Buscar paciente por Cédula o Nombre..." id="search-input">
-                    </div>
+        <!-- Contenedor Principal -->
+        <main class="grid grid-cols-1 lg:col-span-3 gap-8">
+            
+            <!-- COLUMNA 1: Formulario de Registro -->
+            <div class="lg:col-span-1 bg-white p-6 rounded-xl card-shadow animate-fadeIn h-fit sticky top-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">Registrar Nuevo Paciente</h2>
+                <form id="patient-form" class="space-y-4">
+                    
+                    <div>
+                        <label for="dni" class="block text-sm font-medium text-gray-700">DNI (Identificación)</label>
+                        <input type="text" id="dni" placeholder="Ej: 12345678X" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 p-2 border">
+                    </div>
 
-                    <div class="hce-tabs">
-                        <button class="hce-tab-btn active" data-tab="list-patients">Lista de Pacientes</button>
-                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
+                            <input type="text" id="nombre" placeholder="Juan" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 p-2 border">
+                        </div>
+                        <div>
+                            <label for="apellido" class="block text-sm font-medium text-gray-700">Apellido</label>
+                            <input type="text" id="apellido" placeholder="Pérez" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 p-2 border">
+                        </div>
+                    </div>
 
-                    <div class="hce-content-area">
-                        
-                        <div id="list-patients" class="hce-tab-pane active-pane">
-                            <h2>Pacientes Registrados Recientes 
-                                <span id="registration-message" style="display: none; color: green; font-weight: normal; font-size: 0.9em; margin-left: 20px;">
-                                    Registro Exitoso!
-                                </span>
-                            </h2>
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Nombre Completo</th>
-                                        <th>Cédula</th>
-                                        <th>Teléfono</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="fechaNacimiento" class="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
+                            <input type="date" id="fechaNacimiento" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 p-2 border">
+                        </div>
+                        <div>
+                            <label for="sexo" class="block text-sm font-medium text-gray-700">Sexo</label>
+                            <select id="sexo" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 p-2 border bg-white">
+                                <option value="">Seleccione</option>
+                                <option value="M">M - Masculino</option>
+                                <option value="F">F - Femenino</option>
+                                <option value="O">O - Otro</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
+                        <input type="tel" id="telefono" placeholder="Ej: 600123456" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 p-2 border">
+                    </div>
 
-                </div>
-            </main>
-        </div>
-    </div>
-    
-    <!-- MODAL DE REGISTRO DE PACIENTE (Estructura Corregida y Funcional) -->
-    <div id="patient-registration-modal" class="modal-overlay" style="display: inline;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-user-plus"></i> Registrar Nuevo Paciente</h2>
-                <button class="close-btn" id="btn-hide-register"><i class="fas fa-times"></i></button>
-            </div>
-            
-            <!-- INICIO DEL FORMULARIO -->
-            <form id="new-patient-form">
-                <div class="modal-body">
-                    <h3>Datos Personales</h3>
-                    <div class="antecedents-grid">
-                        <div class="input-group">
-                            <label for="reg-name">Nombre Completo</label>
-                            <input type="text" id="reg-name" placeholder="Nombre Apellido" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="reg-cedula">Cédula</label>
-                            <input type="text" id="reg-cedula" placeholder="Ej: 101567890" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="reg-birthdate">Fecha de Nacimiento</label>
-                            <input type="date" id="reg-birthdate" required>
-                        </div>
-                        <div class="input-group">
-                            <label for="reg-gender">Género</label>
-                            <select id="reg-gender" required>
-                                <option value="">Seleccione</option>
-                                <option value="F">Femenino</option>
-                                <option value="M">Masculino</option>
-                                <option value="O">Otro</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <h3>Contacto y Dirección</h3>
-                    <div class="antecedents-grid">
-                        <div class="input-group">
-                            <label for="reg-phone">Teléfono</label>
-                            <input type="tel" id="reg-phone" placeholder="Ej: 310 123 4567">
-                        </div>
-                        <div class="input-group">
-                            <label for="reg-email">Correo Electrónico</label>
-                            <input type="email" id="reg-email" placeholder="correo@ejemplo.com">
-                        </div>
-                        <div class="input-group full-width" style="grid-column: 1 / 3;">
-                            <label for="reg-address">Dirección de Residencia</label>
-                            <input type="text" id="reg-address" placeholder="Calle 1 # 2-34">
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Guardar Registro
-                    </button>
-                </div>
-            </form>
-            <!-- FIN DEL FORMULARIO -->
-        </div>
-    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" id="email" placeholder="ejemplo@hospital.com" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 p-2 border">
+                    </div>
 
-    <script src="auth.js"></script> 
-    <script src="script.js"></script> 
+                    <div>
+                        <label for="direccion" class="block text-sm font-medium text-gray-700">Dirección</label>
+                        <textarea id="direccion" rows="2" placeholder="Calle/Avenida, Número, Ciudad" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 p-2 border"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-primary w-full px-4 py-2 text-white bg-sky-600 rounded-lg hover:bg-sky-700 focus:ring-4 focus:ring-sky-300 font-semibold flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Guardar Paciente
+                    </button>
+                    
+                    <div id="form-message" class="hidden text-sm p-3 rounded-lg font-medium"></div>
+
+                </form>
+            </div>
+
+            <!-- COLUMNA 2/3: Lista de Pacientes -->
+            <div class="lg:col-span-2 bg-white p-6 rounded-xl card-shadow animate-fadeIn">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4 border-b pb-2">Pacientes Registrados</h2>
+                
+                <div id="patient-list-container" class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">DNI</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre Completo</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha Nac.</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teléfono</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="patient-list" class="bg-white divide-y divide-gray-200">
+                            <!-- Los pacientes se listarán aquí -->
+                            <tr id="empty-row">
+                                <td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center italic">
+                                    No hay pacientes registrados aún.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Confirmación (Reemplazo de window.confirm) -->
+    <div id="confirm-modal-overlay" class="custom-modal-overlay hidden fixed inset-0 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-11/12 max-w-sm shadow-2xl animate-fadeIn">
+            <h3 id="confirm-modal-title" class="text-xl font-bold mb-3 text-red-600">Confirmación Necesaria</h3>
+            <p id="confirm-modal-text" class="mb-6 text-gray-700"></p>
+            <div class="flex justify-end space-x-4">
+                <button id="confirm-modal-cancel" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 font-semibold transition">Cancelar</button>
+                <button id="confirm-modal-ok" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold transition">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Script de Lógica del CRUD (NO PERSISTENTE) -->
+    <script>
+        // Array global para almacenar los datos de los pacientes (almacenamiento no persistente)
+        let patients = [];
+        let nextPatientId = 1;
+
+        // --- DATOS DUMMY PARA PRUEBA (SOLO AL INICIAR) ---
+        patients.push({
+            id: (nextPatientId++).toString(),
+            DNI: "54321098A",
+            Nombre: "Ana",
+            Apellido: "García",
+            FechaNacimiento: "1995-10-20", 
+            Sexo: "F",
+            Telefono: "612345678",
+            Email: "ana.garcia@test.com",
+            Direccion: "Calle Falsa 123",
+            FechaRegistro: new Date(new Date().getTime() - 86400000), // Hace 1 día
+        });
+        patients.push({
+            id: (nextPatientId++).toString(),
+            DNI: "98765432B",
+            Nombre: "Luis",
+            Apellido: "Martínez",
+            FechaNacimiento: "1988-03-15", 
+            Sexo: "M",
+            Telefono: "698765432",
+            Email: "luis.martinez@test.com",
+            Direccion: "Av. Siempre Viva 45",
+            FechaRegistro: new Date(), // Hoy
+        });
+        // --------------------------------------------------
+
+
+        // Referencias del DOM
+        const form = document.getElementById('patient-form');
+        const patientList = document.getElementById('patient-list');
+        const emptyRow = document.getElementById('empty-row');
+        const formMessage = document.getElementById('form-message');
+
+        // Referencias del Modal de Confirmación
+        const confirmModalOverlay = document.getElementById('confirm-modal-overlay');
+        const confirmModalText = document.getElementById('confirm-modal-text');
+        const confirmModalOk = document.getElementById('confirm-modal-ok');
+        const confirmModalCancel = document.getElementById('confirm-modal-cancel');
+
+
+        // Helper para mostrar mensajes del formulario
+        function displayMessage(message, className) {
+            formMessage.textContent = message;
+            formMessage.className = `text-sm p-3 rounded-lg font-medium ${className}`;
+            formMessage.classList.remove('hidden');
+            setTimeout(() => {
+                formMessage.classList.add('hidden');
+            }, 5000);
+        }
+
+        // 1. CREAR PACIENTE
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            console.log("Submit handler reached. Attempting to save patient..."); // Log de depuración
+
+            const dni = document.getElementById('dni').value.trim();
+
+            // Verificar si el DNI ya existe (simulación de restricción UNIQUE)
+            const existingPatient = patients.find(p => p.DNI === dni);
+            if (existingPatient) {
+                displayMessage(`Error: El DNI '${dni}' ya está registrado.`, 'bg-red-100 text-red-700');
+                return;
+            }
+
+            const newPatient = {
+                id: (nextPatientId++).toString(), // Genera un ID simple
+                DNI: dni,
+                Nombre: document.getElementById('nombre').value.trim(),
+                Apellido: document.getElementById('apellido').value.trim(),
+                FechaNacimiento: document.getElementById('fechaNacimiento').value, 
+                Sexo: document.getElementById('sexo').value,
+                Telefono: document.getElementById('telefono').value.trim(),
+                Email: document.getElementById('email').value.trim(),
+                Direccion: document.getElementById('direccion').value.trim(),
+                FechaRegistro: new Date(), // Usado para ordenar
+            };
+
+            patients.push(newPatient);
+
+            displayMessage('Paciente registrado exitosamente.', 'bg-green-100 text-green-700');
+            form.reset();
+            renderPatients(); // Volver a dibujar la lista
+        });
+
+        // 2. LEER PACIENTES (Renderizar)
+        function renderPatients() {
+            patientList.innerHTML = ''; // Limpiar lista
+            
+            if (patients.length === 0) {
+                emptyRow.classList.remove('hidden');
+                patientList.appendChild(emptyRow);
+                return;
+            } else {
+                emptyRow.classList.add('hidden');
+            }
+
+            // Ordenar pacientes por FechaRegistro (más reciente primero)
+            patients.sort((a, b) => b.FechaRegistro.getTime() - a.FechaRegistro.getTime());
+
+            patients.forEach(p => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-100 transition duration-150';
+
+                // Formato de fecha de nacimiento
+                let fechaNacimiento = p.FechaNacimiento ? new Date(p.FechaNacimiento + 'T00:00:00').toLocaleDateString('es-ES') : 'N/A';
+                
+                const fullName = `${p.Nombre || ''} ${p.Apellido || ''}`;
+
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${p.id}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${p.DNI || 'N/A'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">${fullName}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${fechaNacimiento}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${p.Telefono || 'N/A'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                        <button onclick="showDeleteConfirm('${p.id}', '${fullName}')" class="text-red-600 hover:text-red-800 focus:outline-none" title="Eliminar Paciente">
+                            <svg class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    </td>
+                `;
+                patientList.appendChild(row);
+            });
+        }
+        
+        // 3. ELIMINAR PACIENTE (Integrado con Modal personalizado)
+        window.showDeleteConfirm = function(id, name) {
+            confirmModalText.innerHTML = `¿Está seguro de eliminar al paciente <strong>${name}</strong> (ID: ${id})? Esta acción es irreversible y los datos no se pueden recuperar.`;
+            confirmModalOverlay.classList.remove('hidden');
+
+            // Limpia los listeners anteriores
+            confirmModalOk.onclick = null;
+            confirmModalCancel.onclick = null;
+            
+            // Asigna el nuevo listener para la acción de eliminar
+            confirmModalOk.onclick = () => {
+                deletePatient(id, name);
+                confirmModalOverlay.classList.add('hidden');
+            };
+
+            // Asigna el listener para cancelar
+            confirmModalCancel.onclick = () => {
+                confirmModalOverlay.classList.add('hidden');
+            };
+        }
+
+        function deletePatient(id, name) {
+            const initialLength = patients.length;
+            
+            // Filtra la lista, manteniendo solo los pacientes cuyo ID no coincida
+            patients = patients.filter(p => p.id !== id);
+            
+            if (patients.length < initialLength) {
+                displayMessage(`Paciente ${name} eliminado.`, 'bg-green-100 text-green-700');
+            } else {
+                displayMessage(`Error al eliminar: Paciente con ID ${id} no encontrado.`, 'bg-red-100 text-red-700');
+            }
+            
+            renderPatients(); // Volver a dibujar la lista actualizada
+        }
+
+        // Iniciar la aplicación al cargar
+        window.onload = renderPatients;
+
+    </script>
 </body>
 </html>
