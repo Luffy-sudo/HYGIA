@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HYGIA - Iniciar Sesión</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuración de la fuente Inter -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e0f2f7; /* Azul claro suave */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center">
+
+    <div class="w-full max-w-md p-8 m-4 bg-white rounded-xl shadow-2xl border-t-8 border-indigo-600">
+        
+        <!-- Encabezado del Formulario -->
+        <header class="text-center mb-8">
+            <!-- Icono de Hospital (Inline SVG) -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto text-indigo-600 mb-2"><path d="M12 2L3 7v10l9 5 9-5V7z"></path><path d="M3 7l9 5 9-5"></path><path d="M12 2v15"></path><path d="M17 12h-2c-1.1 0-2-.9-2-2V7"></path><path d="M17 17h-5v-5"></path></svg>
+            <h1 class="text-3xl font-bold text-gray-800">Acceso al Sistema HYGIA</h1>
+            <p class="text-gray-500 text-sm mt-1">Gestión Hospitalaria</p>
+        </header>
+
+        <!-- Formulario de Inicio de Sesión -->
+        <form id="login-form" class="space-y-6">
+            
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Usuario</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150"
+                    placeholder="ej. admin"
+                >
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150"
+                    placeholder="ej. hygia2025"
+                >
+            </div>
+
+            <div id="message-box" class="hidden text-center p-3 rounded-lg text-sm transition duration-300" role="alert"></div>
+
+            <button 
+                type="submit"
+                id="login-button"
+                class="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 transform hover:scale-[1.01]"
+            >
+                <!-- Icono de Candado (Inline SVG) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                Iniciar Sesión
+            </button>
+        </form>
+
+        <p class="mt-8 text-center text-sm text-gray-500">
+            **Credenciales de Prueba:** Usuario: <code class="font-mono text-indigo-700 bg-indigo-50 px-1 rounded">admin</code> | Contraseña: <code class="font-mono text-indigo-700 bg-indigo-50 px-1 rounded">hygia2025</code>
+        </p>
+
+    </div>
+
+    <script>
+        const form = document.getElementById('login-form');
+        const messageBox = document.getElementById('message-box');
+        const loginButton = document.getElementById('login-button');
+
+        // Credenciales de prueba codificadas
+        const TEST_USERNAME = 'admin';
+        const TEST_PASSWORD = 'hygia2025';
+        const AUTH_KEY = 'hygia_authenticated'; // Clave para sessionStorage
+
+        // Función para mostrar mensajes de estado
+        function showMessage(text, isError = false) {
+            messageBox.textContent = text;
+            messageBox.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700');
+            
+            if (isError) {
+                messageBox.classList.add('bg-red-100', 'text-red-700');
+            } else {
+                messageBox.classList.add('bg-green-100', 'text-green-700');
+            }
+        }
+
+        function setButtonLoading(isLoading) {
+            if (isLoading) {
+                loginButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="animate-spin mr-2"><path d="M21 12a9 9 0 0 1-9 9 9 9 0 0 1-9-9c0-5 4-9 9-9"></path></svg>
+                    Verificando...
+                `;
+                loginButton.disabled = true;
+            } else {
+                loginButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    Iniciar Sesión
+                `;
+                loginButton.disabled = false;
+            }
+        }
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            setButtonLoading(true);
+
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            // Pequeño retardo para simular la verificación de red
+            await new Promise(resolve => setTimeout(resolve, 800));
+
+            if (username === TEST_USERNAME && password === TEST_PASSWORD) {
+                showMessage('Inicio de sesión exitoso. Redirigiendo...', false);
+                
+                // Guardar la bandera de autenticación en la sesión
+                sessionStorage.setItem(AUTH_KEY, 'true');
+                
+                // Redirigir a la página principal del panel de control
+                window.location.href = 'index.html';
+            } else {
+                showMessage('Credenciales inválidas. Por favor, intente de nuevo.', true);
+                setButtonLoading(false);
+            }
+        });
+        
+        // Comprobar si ya está autenticado al cargar la página
+        window.onload = function() {
+            if (sessionStorage.getItem(AUTH_KEY) === 'true') {
+                // Si está autenticado, redirigir directamente al dashboard
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>
