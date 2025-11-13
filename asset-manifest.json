@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/HYGIA/static/css/main.f855e6bc.css",
+    "main.js": "/HYGIA/static/js/main.a477f0bd.js",
+    "static/js/453.117b0875.chunk.js": "/HYGIA/static/js/453.117b0875.chunk.js",
+    "static/media/logo.svg": "/HYGIA/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/HYGIA/index.html",
+    "main.f855e6bc.css.map": "/HYGIA/static/css/main.f855e6bc.css.map",
+    "main.a477f0bd.js.map": "/HYGIA/static/js/main.a477f0bd.js.map",
+    "453.117b0875.chunk.js.map": "/HYGIA/static/js/453.117b0875.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f855e6bc.css",
+    "static/js/main.a477f0bd.js"
+  ]
+}
